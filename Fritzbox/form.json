@@ -1,0 +1,39 @@
+{
+  "elements": [
+    {"type":"ValidationTextBox", "name": "Host","caption":"Hostname oder IP"},
+    {"type":"NumberSpinner","name":"Port","caption":"Port"},
+    {"type":"NumberSpinner","name":"Timeout","caption":"Timeout"},
+    {"type":"ValidationTextBox", "name": "Username", "caption": "Username" },
+    {"type":"PasswordTextBox", "name": "Password", "caption": "Password" },
+    {"type":"Label","label":"---------------------------------------------------------------------------------------------------------------------"},
+    {"type":"ValidationTextBox", "name": "PhonebookFile","caption":"Temp. Telefonbuch"},
+    {"type":"CheckBox", "name": "PhonebookImages","caption":"Bilder aus Telefonbuch Importieren"},
+    {"type":"CheckBox", "name": "PhonebookList","caption":"Telefonbuch anzeigen"},
+	{"type":"Label","label":"---------------------------------------------------------------------------------------------------------------------"},
+    {"type":"ValidationTextBox", "name": "MsnNumbers","caption":"MSN´s (nr=name,...."},
+    {"type":"NumberSpinner","name":"Lines","caption":"Verfügbare Leitungen"},
+    {"type":"Label","label":"---------------------------------------------------------------------------------------------------------------------"},
+    {"type":"CheckBox", "name": "CallerInfo","caption":"Anrufer Informationen anzeigen"},
+	{"type":"CheckBox", "name": "CallerList","caption":"Anrufer Liste anzeigen"},
+    {"type":"NumberSpinner","name":"CallerListMaxEntrys","caption":"Einträge Anruf Liste"},
+  ],
+  "actions": [
+    {"type": "Button", "label": "Erstelle Telefonbuch", "onClick": "FB_BuildPhonebook($id, true);" },
+    {"type":"Label","label":"---------------------------------------------------------------------------------------------------------------------"},
+    {"type":"ValidationTextBox", "name": "Nummer","caption":"Rufnummer"},
+    {"type":"ValidationTextBox", "name": "Msn","caption":"MSN Nr"},
+    {"type": "Button", "label": "Test Anruf", "onClick": "FB_TestCall($id, $Nummer, $Msn);" }
+	
+  ],
+  "status":  [
+    {"code": 101, "icon": "inactive", "caption": "Konfiguration ungültig."},
+    {"code": 102, "icon": "active", "caption": "Konfiguration gültig."},
+    {"code": 201, "icon": "inactive", "caption": "Hostname fehlt oder ist ungültig"},
+    {"code": 202, "icon": "inactive", "caption": "Host ungültig oder nicht erreichbar"},
+	
+    {"code": 301, "icon": "inactive", "caption": "Name für Temp. Telefonbuch fehlt"},
+    {"code": 302, "icon": "inactive", "caption": "Test Anruf Fehlgeschlagen"},
+    {"code": 303, "icon": "inactive", "caption": "Benutzername und Passwort wird benötigt"},
+ 	
+  ] 	
+}

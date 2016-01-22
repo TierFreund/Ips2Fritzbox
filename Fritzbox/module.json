@@ -1,0 +1,14 @@
+{
+	"id": "{F6F3A773-F685-1002-805E-83FD02122015}",
+	"name": "Fritzbox",
+	"type": 3,
+	"vendor": "",
+	"aliases": 
+	[
+		"Fritzbox"
+	],
+    "parentRequirements": ["{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"],
+    "childRequirements": [],
+    "implemented": ["{018EF6B5-AB94-40C6-AA53-46943E824ACF}"],
+	"prefix": "FB"
+}
