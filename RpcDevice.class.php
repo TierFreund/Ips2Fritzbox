@@ -46,7 +46,7 @@ abstract class uRpcDevice {
 	protected function GetOnlineState(){
 	
 		if(!is_null($this->_boIsOnline))return $this->_boIsOnline;
-		$this->_boIsOnline=!(self::Sys_Ping() == false);
+		$this->_boIsOnline=self::Sys_Ping();
    		return $this->_boIsOnline; 
 	}
 	protected function IO(){
@@ -56,8 +56,7 @@ abstract class uRpcDevice {
 	function Sys_Ping(){
 		$p=parse_url($this->_url);
 		$host=empty($p['host'])?$this->_url:$p['host'];
-		exec(sprintf('ping -n 1 -w %d %s',$timeout=2, escapeshellarg($host)), $res, $rval);	
-		return ($rval == 0);
+		return Sys_Ping($host,20000);
 	}
 }
 ?>
