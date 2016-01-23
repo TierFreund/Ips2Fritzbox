@@ -22,15 +22,24 @@ require_once( __DIR__ . '/../RpcBaseModule.class.php');
 require_once( __DIR__ . '/../RpcIoSoap.class.php');
 
 class fritzbox extends RpcBaseModule {
-	const CONFIGTMP_FILE= IPS_GetKernelDir().'webfront/user/fritzbox/lastcall.tmp';
-	const IMAGES_PATH   = IPS_GetKernelDir().'webfront/user/fritzbox/images/';
-	const PHONEBOOK_PATH= IPS_GetKernelDir().'webfront/user/fritzbox/';
-	
-	const TEMPLATE_PATH = __DIR__ . '/templates/';
+	private $CONFIGTMP_FILE = '';
+	private $LOCAL_IMG_PATH = '';
+	private $IMAGE_PATH		= '';
+	private $PHONEBOOK_PATH = '';
+	private $TEMPLATE_PATH = '';
 
 	
 	private $_aPBItems=null;
 	private $_sMsnNumbers='';
+	public function __construct($InstanceID){
+		$this->CONFIGTMP_FILE 	= IPS_GetKernelDir().'/webfront/user/fritzbox/lastcall.tmp';
+		$this->PHONEBOOK_PATH	= IPS_GetKernelDir().'/webfront/user/fritzbox/';
+		$this->LOCAL_IMG_PATH	= IPS_GetKernelDir().'/webfront/user/fritzbox/images/';
+		$this->IMAGE_PATH		= 'user/fritzbox/images/';
+		$this->TEMPLATE_PATH 	= __DIR__ . '/templates/';
+		parent::__construct($InstanceID);
+	}	
+	
 	public function Create(){
 		parent::Create();
 		$this->RegisterPropertyString("PhonebookFile", "phonebook.serialized");
@@ -86,8 +95,8 @@ class fritzbox extends RpcBaseModule {
 
 		if($this->CheckConfig()){
 			// Copy Files Only at First Start when Dir not exist 
-			if(!file_exists(self::IMAGES_PATH)){
-				$dir=self::MkDir(self::IMAGES_PATH)
+			if(!file_exists(self::$IMAGES_PATH)){
+				$dir=self::MkDir(self::IMAGES_PATH);
 				
 				$files=array('noimage.jpg','unknownimage.jpg','anonym.jpg','callin.gif','callout.gif','callinfailed.gif','photoicon.gif','blank.gif');
 				foreach($files as $file){
@@ -159,14 +168,14 @@ class fritzbox extends RpcBaseModule {
 	public function PhonebookLoadLocal(string $fileName=null){
 		if(empty($fileName))$fileName=$this->ReadPropertyString('PhonebookFile');
 		if(empty($fileName))throw new Exception('Empty filename for local PhonebookFile!!');
-		if(strpos($fileName,'/')===false)$fileName=self::PHONEBOOK_PATH.$fileNime;
+		if(strpos($fileName,'/')===false)$fileName=$this->PHONEBOOK_PATH.$fileNime;
 		$this->_aPBItems=unserialize(file_get_contents($fileName));
 		return !is_null($this->_aPBItems);
 	}
 	public function PhonebookSaveLocal(string $fileName=null){
 		if(empty($fileName))$fileName=$this->ReadPropertyString('PhonebookFile');
 		if(empty($fileName))throw new Exception('Empty filename for local PhonebookFile!!');
-		if(strpos($fileName,'/')===false)$fileName=self::PHONEBOOK_PATH.$fileNime;
+		if(strpos($fileName,'/')===false)$fileName=$this->PHONEBOOK_PATH.$fileNime;
 		file_put_contents($fileName,serialize($this->_aPBItems));
 		return $fileName;
 	}
@@ -177,7 +186,7 @@ class fritzbox extends RpcBaseModule {
 		$xml=simplexml_load_file($r['NewPhonebookURL']);
 		$this->_aPBItems=['names'=>[],'numbers'=>[],'types'=>[]];
 
-		$imgpath=$this->ReadPropertyBoolean('PhonebookImages')?self::IMAGES_PATH:'';
+		$imgpath=$this->ReadPropertyBoolean('PhonebookImages')?$this->LOCAL_IMG_PATH:'';
 		$ukey=0;
 		foreach($xml->phonebook->contact as $c){
 			$nr='';
@@ -291,7 +300,7 @@ class fritzbox extends RpcBaseModule {
 				$type=$this->_aPBItems['types'][$n[0]];
 				$out[]=str_ireplace(
 					array('#icon','#name','#type','#number'),
-					array('user/fritzbox/images/'.$icon,$name,$type,$number),
+					array($this->IMAGES_PATH.$icon,$name,$type,$number),
 					$body
 				);	
 				$lname=$name;
@@ -342,7 +351,7 @@ class fritzbox extends RpcBaseModule {
 		return $nr;
 	}
 	protected function Decode_Call($data){
-		$cfgfn=self::CONFIGTMP_FILE;
+		$cfgfn=$this->CONFIGTMP_FILE;
 		$cfg=@unserialize(file_get_contents($cfgfn));
 		$arr=explode(';',$data.';');
 		$date=array_shift($arr); 
@@ -386,11 +395,10 @@ class fritzbox extends RpcBaseModule {
 		if($line<$maxLines)$this->SetValueString('Line_'.($line+1),$r);
 		$this->SetValueString('State',$r);
 		if(($cmd=='RING'||$cmd=='CALL') && $this->ReadPropertyBoolean('CallerInfo')){	
-			$path='user/fritzbox/images/';
 			if(!is_array($nameInfo))
-				$img=$path.(is_numeric($caller)?'unknownimage.jpg':'anonym.jpg');
+				$img=$this->IMAGES_PATH.(is_numeric($caller)?'unknownimage.jpg':'anonym.jpg');
 			else
-				$img=$path.(empty($nameInfo['image'])?'noimage.jpg':$nameInfo['image']);
+				$img=$this->IMAGES_PATH.(empty($nameInfo['image'])?'noimage.jpg':$nameInfo['image']);
 			$name='Unbekannt';
 			$number=$caller;
 			if(is_array($nameInfo)){
@@ -408,8 +416,8 @@ class fritzbox extends RpcBaseModule {
 		return $r;
 	}	
 	protected function GetTemplate($ident){
-		if(file_exists(self::TEMPLATE_PATH ."$ident.htm"))
-			return file_get_contents(self::TEMPLATE_PATH ."$ident.htm");
+		if(file_exists($this->TEMPLATE_PATH ."$ident.htm"))
+			return file_get_contents($this->TEMPLATE_PATH ."$ident.htm");
 		if($ident=='CallerList'){
 			return '<table style="width: 100%">
 <thead>
