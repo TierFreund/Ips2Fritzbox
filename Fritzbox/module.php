@@ -362,9 +362,9 @@ class fritzbox extends RpcBaseModule {
 		$format='';
 		switch($cmd){
 			case 'RING':
-				$format="%s: Anruf von %s für %s";
+				$format="Anruf von %s für %s";
 			case 'CALL':	
-				if(empty($format))$format="%s: Anruf von %s zu %s";
+				if(empty($format))$format="Anruf von %s zu %s";
 				$caller=array_shift($arr);
 				$called=array_shift($arr);
 				$a=$caller;$b=$called;
@@ -380,12 +380,12 @@ class fritzbox extends RpcBaseModule {
 				$cfg[$line]=[$caller,$called,$cmd=='RING', $nameInfo, $msnInfo];
 				break;
 			case 'CONNECT':
-				$format="%s: %s verbunden mit %s";
+				$format="%s verbunden mit %s";
 				$a=empty($cfg[$line][3])?$cfg[$line][0]:$cfg[$line][3]['info'];
 				$b=empty($cfg[$line][4])?$cfg[$line][1]:$cfg[$line][4]['name'];
 				break;
 			case 'DISCONNECT':
-				$format="%s: Verbindung %s mit %s beendet";
+				$format="Verbindung %s mit %s beendet";
 				$a=empty($cfg[$line][3])?$cfg[$line][0]:$cfg[$line][3]['info'];
 				$b=empty($cfg[$line][4])?$cfg[$line][1]:$cfg[$line][4]['name'];
 				unset($cfg[$line]);
@@ -393,7 +393,7 @@ class fritzbox extends RpcBaseModule {
 			default : $values=null;	
 		}		
 		file_put_contents($cfgfn,serialize($cfg));
-		$r=sprintf($format,$date, $a,$b);
+		$r=sprintf($format,$a,$b);
 		$maxLines=$this->ReadPropertyInteger('Lines');
 		if($line<$maxLines)$this->SetValueString('Line_'.($line+1),$r);
 		$this->SetValueString('State',$r);
