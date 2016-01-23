@@ -95,8 +95,8 @@ class fritzbox extends RpcBaseModule {
 
 		if($this->CheckConfig()){
 			// Copy Files Only at First Start when Dir not exist 
-			if(!file_exists(self::$IMAGES_PATH)){
-				$dir=self::MkDir(self::IMAGES_PATH);
+			if(!file_exists($this->IMAGES_PATH)){
+				$dir=self::MkDir($this->IMAGES_PATH);
 				
 				$files=array('noimage.jpg','unknownimage.jpg','anonym.jpg','callin.gif','callout.gif','callinfailed.gif','photoicon.gif','blank.gif');
 				foreach($files as $file){
@@ -108,7 +108,7 @@ class fritzbox extends RpcBaseModule {
 			// Check If local Phonebook Exist , create it when not
 			$file=$this->ReadPropertyString('PhonebookFile');
 			if(strpos($file,'/')===false)
-				$file=self::MkDir(self::PHONEBOOK_PATH).$file;
+				$file=self::MkDir($this->HONEBOOK_PATH).$file;
 						
 			
 			if(!file_exists($file))
