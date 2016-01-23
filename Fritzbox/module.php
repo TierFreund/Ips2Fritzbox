@@ -95,8 +95,8 @@ class fritzbox extends RpcBaseModule {
 
 		if($this->CheckConfig()){
 			// Copy Files Only at First Start when Dir not exist 
-			if(!file_exists($this->IMAGES_PATH)){
-				$dir=self::MkDir($this->IMAGES_PATH);
+			if(!file_exists($this->IMAGE_PATH)){
+				$dir=self::MkDir($this->IMAGE_PATH);
 				
 				$files=array('noimage.jpg','unknownimage.jpg','anonym.jpg','callin.gif','callout.gif','callinfailed.gif','photoicon.gif','blank.gif');
 				foreach($files as $file){
@@ -300,7 +300,7 @@ class fritzbox extends RpcBaseModule {
 				$type=$this->_aPBItems['types'][$n[0]];
 				$out[]=str_ireplace(
 					array('#icon','#name','#type','#number'),
-					array($this->IMAGES_PATH.$icon,$name,$type,$number),
+					array($this->IMAGE_PATH.$icon,$name,$type,$number),
 					$body
 				);	
 				$lname=$name;
@@ -396,9 +396,9 @@ class fritzbox extends RpcBaseModule {
 		$this->SetValueString('State',$r);
 		if(($cmd=='RING'||$cmd=='CALL') && $this->ReadPropertyBoolean('CallerInfo')){	
 			if(!is_array($nameInfo))
-				$img=$this->IMAGES_PATH.(is_numeric($caller)?'unknownimage.jpg':'anonym.jpg');
+				$img=$this->IMAGE_PATH.(is_numeric($caller)?'unknownimage.jpg':'anonym.jpg');
 			else
-				$img=$this->IMAGES_PATH.(empty($nameInfo['image'])?'noimage.jpg':$nameInfo['image']);
+				$img=$this->IMAGE_PATH.(empty($nameInfo['image'])?'noimage.jpg':$nameInfo['image']);
 			$name='Unbekannt';
 			$number=$caller;
 			if(is_array($nameInfo)){
