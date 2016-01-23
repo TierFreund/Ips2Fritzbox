@@ -181,6 +181,7 @@ class fritzbox extends RpcBaseModule {
 	}
 	public function BuildPhonebook(boolean $saveLocal=null){
 		if(!$this->IsAuthSet()) throw new Exception('You must set auth User and Password to call '.__FUNCTION__);
+		IPS_LogMessage(__CLASS__ ,"Build local phonebook");
 		$r=$this->API()->GetPhonebook(0);
 		if(preg_match('/sid=(\w*)/i',$r['NewPhonebookURL'],$m))$sid=$m[1];
 		$xml=simplexml_load_file($r['NewPhonebookURL']);
