@@ -67,18 +67,18 @@ class fritzbox extends RpcBaseModule {
 			SetValueString($this->RegisterVariableString('Line_'.$j,"Leitung $j",'',10+$j),'Bereit');
 		for($j=$lines+1;$j<11;$j++)@$this->UnregisterVariable('Line_'.$j);
 		if($this->CheckConfig()){
-			$imgpath=IPS_GetKernelDir().'\\webfront\\Fritzbox\\Images\\';
+			$imgpath=IPS_GetKernelDir().'/webfront/Fritzbox/Images/';
 			if(!file_exists($imgpath)){
 				$dir='';
-				foreach(explode('\\',$imgpath) as $d){
+				foreach(explode('/',$imgpath) as $d){
 					if(!file_exists($dir.$d))mkdir($dir.$d);
-					$dir.=$d.'\\';
+					$dir.=$d.'/';
 				}
 			}
 			$files=array('noimage.jpg','unknownimage.jpg','anonym.jpg','callin.gif','callout.gif','callinfailed.gif','photoicon.gif','blank.gif');
 			foreach($files as $file){
 				if(file_exists($imgpath.$file))break;
-				$tmp=file_get_contents(__DIR__ .'\\images\\'.$file);
+				$tmp=file_get_contents(__DIR__ .'/images/'.$file);
 				file_put_contents($imgpath.$file,$tmp);
 			}	
 			if(!file_exists($this->ReadPropertyString('PhonebookFile')))
@@ -137,14 +137,14 @@ class fritzbox extends RpcBaseModule {
 	public function PhonebookLoadLocal(string $fileName=null){
 		if(empty($fileName))$fileName=$this->ReadPropertyString('PhonebookFile');
 		if(empty($fileName))throw new Exception('Empty filename for local PhonebookFile!!');
-		$this->_aPBItems=unserialize(file_get_contents(__DIR__.'\\'.$fileName));
+		$this->_aPBItems=unserialize(file_get_contents(__DIR__.'/'.$fileName));
 		return !is_null($this->_aPBItems);
 	}
 	public function PhonebookSaveLocal(string $fileName=null){
 		if(empty($fileName))$fileName=$this->ReadPropertyString('PhonebookFile');
 		if(empty($fileName))throw new Exception('Empty filename for local PhonebookFile!!');
 		$fn=$fileName?$fileName:'phonebook.serialized';
-		file_put_contents(__DIR__.'\\'.$fn,serialize($this->_aPBItems));
+		file_put_contents(__DIR__.'/'.$fn,serialize($this->_aPBItems));
 		return $fn;
 	}
 	public function BuildPhonebook(boolean $saveLocal=null){
@@ -318,7 +318,7 @@ class fritzbox extends RpcBaseModule {
 		return $nr;
 	}
 	protected function Decode_Call($data){
-		$cfg=@unserialize(file_get_contents(__DIR__ .'\\callcfg.tmp'));
+		$cfg=@unserialize(file_get_contents(__DIR__ .'/callcfg.tmp'));
 		$arr=explode(';',$data.';');
 		$date=array_shift($arr); 
 		$cmd=array_shift($arr);
@@ -355,7 +355,7 @@ class fritzbox extends RpcBaseModule {
 				break;
 			default : $values=null;	
 		}		
-		file_put_contents(__DIR__ .'\\callcfg.tmp',serialize($cfg));
+		file_put_contents(__DIR__ .'/callcfg.tmp',serialize($cfg));
 		$r=sprintf($format,$a,$b);
 		$maxLines=$this->ReadPropertyInteger('Lines');
 		if($line<$maxLines)$this->SetValueString('Line_'.($line+1),$r);

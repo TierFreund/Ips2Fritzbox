@@ -56,7 +56,7 @@ abstract class uRpcDevice {
 	function Sys_Ping(){
 		$p=parse_url($this->_url);
 		$host=empty($p['host'])?$this->_url:$p['host'];
-		return Sys_Ping($host,20000);
+		return Sys_Ping($host,2000);
 	}
 }
 ?>
