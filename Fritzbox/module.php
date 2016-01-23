@@ -175,7 +175,7 @@ class fritzbox extends RpcBaseModule {
 	public function PhonebookSaveLocal(string $fileName=null){
 		if(empty($fileName))$fileName=$this->ReadPropertyString('PhonebookFile');
 		if(empty($fileName))throw new Exception('Empty filename for local PhonebookFile!!');
-		if(strpos($fileName,'/')===false)$fileName=$this->PHONEBOOK_PATH.$fileNime;
+		if(strpos($fileName,'/')===false)$fileName=$this->PHONEBOOK_PATH.$fileName;
 		file_put_contents($fileName,serialize($this->_aPBItems));
 		return $fileName;
 	}
