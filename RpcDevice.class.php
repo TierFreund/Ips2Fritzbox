@@ -40,7 +40,6 @@ abstract class uRpcDevice {
 	protected function Call($service,$action,$arguments,$filter=null){
 		if(!$con=$this->GetServiceConnData($service)) 
 			throw new uRpcDeviceException (get_class($this)."=>Invalid Service Name '$service' :: $action");
-//echo __class__ . '::'. __function__ . "<nr>";
 		return $this->IO()->Call($url=$con[2],$service=$con[1],$action,$arguments,$filter,$ReturnValue=null,$Port=$con[0]);	
 	}	
 	protected function GetOnlineState(){
