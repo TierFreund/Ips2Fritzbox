@@ -393,7 +393,7 @@ class fritzbox extends RpcBaseModule {
 			default : $values=null;	
 		}		
 		file_put_contents($cfgfn,serialize($cfg));
-		$r=sprintf($format,$a,$b,$date);
+		$r=sprintf($format,$date, $a,$b);
 		$maxLines=$this->ReadPropertyInteger('Lines');
 		if($line<$maxLines)$this->SetValueString('Line_'.($line+1),$r);
 		$this->SetValueString('State',$r);
