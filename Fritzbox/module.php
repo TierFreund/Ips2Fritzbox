@@ -108,7 +108,7 @@ class fritzbox extends RpcBaseModule {
 			// Check If local Phonebook Exist , create it when not
 			$file=$this->ReadPropertyString('PhonebookFile');
 			if(strpos($file,'/')===false)
-				$file=self::MkDir($this->HOMEBOOK_PATH).$file;
+				$file=self::MkDir($this->PHONEBOOK_PATH).$file;
 						
 			
 			if(!file_exists($file))
